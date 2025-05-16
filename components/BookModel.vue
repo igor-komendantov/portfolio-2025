@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Raycaster, Vector2 } from "three";
+import { LoopOnce, Raycaster, Vector2 } from "three";
 import { ref, onMounted, onBeforeUnmount } from "vue";
 
 const { scene: model, nodes, animations } = await useGLTF("/models/book.glb");
@@ -29,6 +29,18 @@ function onPointerMove(event: MouseEvent) {
 
 function onClick() {
   if (!hovered.value) return;
+  const unlockClip = animations[1];
+  const unlock = mixer.clipAction(unlockClip);
+  unlock.setLoop(LoopOnce); // проиграть один раз
+  unlock.clampWhenFinished = true; // сохранить финальное состояние
+  unlock.play();
+
+  const openClip = animations[0];
+  const open = mixer.clipAction(openClip);
+  open.setLoop(LoopOnce); // проиграть один раз
+  open.clampWhenFinished = true; // сохранить финальное состояние
+  open.play();
+  console.log(animations)
   
 }
 
@@ -41,7 +53,6 @@ onBeforeUnmount(() => {
   renderer.value.domElement.removeEventListener("pointermove", onPointerMove);
   renderer.value.domElement.removeEventListener("click", onClick);
 });
-
 </script>
 
 <template>
