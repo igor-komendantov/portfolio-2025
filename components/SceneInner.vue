@@ -1,13 +1,7 @@
 <script setup lang="ts">
-import type { GLTFResult } from "@tresjs/cientos";
-// const gltf = await useGLTF("/models/book.glb");
-const { gltf } = defineProps<{
-  gltf: GLTFResult;
-}>();
-const { button_rotater: bookSnapMesh } = gltf.nodes;
-const { mixer } = useAnimations(gltf.animations, gltf.scene);
-const scene = useScene();
-scene.value.gltf = shallowRef(gltf);
+const { scene, nodes, animations } = await useGLTF("/models/book.glb");
+const { button_rotater: bookSnapMesh } = nodes;
+const { mixer } = useAnimations(animations, scene);
 </script>
 
 <template>
@@ -16,12 +10,17 @@ scene.value.gltf = shallowRef(gltf);
   <LightSources />
 
   <Suspense>
-    <BookSnap :mixer="mixer" />
+    <BookSnap
+      :mesh="bookSnapMesh"
+      :animations="animations"
+      :scene="scene"
+      :mixer="mixer"
+    />
   </Suspense>
 
   <Suspense>
-    <primitive :object="gltf.scene" />
+    <primitive :object="scene" />
   </Suspense>
 
-  <!-- <PageNavigation :mixer="mixer" /> -->
+  <PageNavigation :mixer="mixer" />
 </template>

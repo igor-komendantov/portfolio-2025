@@ -1,17 +1,15 @@
 <script setup lang="ts">
-import type { AnimationMixer, AnimationClip, Scene } from "three";
+import type { AnimationMixer } from "three";
 import { Html } from "@tresjs/cientos";
 
 const { mixer } = defineProps<{
   mixer: AnimationMixer;
-  animations: AnimationClip[];
-  sceneModel: Scene
 }>();
 
-const sceneMeta = useScene();
+const scene = useScene();
 
-const isFirstStep = computed(() => {
-  return sceneMeta.value.pageStep === 0;
+const isPrevAvailable = computed(() => {
+  return scene.value.pageStep !== 0;
 });
 </script>
 
@@ -19,8 +17,8 @@ const isFirstStep = computed(() => {
   <Html :position="[-1, 0, 0]">
     <transition name="fade">
       <button
-        v-show="sceneMeta.showNavigation && !isFirstStep"
-        :disabled="isFirstStep"
+        v-show="scene.showNavigation && isPrevAvailable"
+        :disabled="!isPrevAvailable"
       >
         <img
           src="https://placehold.co/600x400/EEE/31343C"
@@ -34,7 +32,7 @@ const isFirstStep = computed(() => {
 
   <Html :position="[0.9, 0, 0]">
     <transition name="fade">
-      <button v-show="sceneMeta.showNavigation">
+      <button v-show="scene.showNavigation">
         <img
           src="https://placehold.co/600x400/EEE/31343C"
           width="100"
