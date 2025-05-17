@@ -16,7 +16,7 @@ export const prepareActionOfOpening = (
   turnFirstPage.setLoop(LoopOnce, 1);
   turnFirstPage.clampWhenFinished = true;
 
-  return () => {
+  return async () => {
     unlockButton.play();
     turnFirstPage.play();
   };

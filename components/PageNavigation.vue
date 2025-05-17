@@ -5,22 +5,45 @@ import { Html } from "@tresjs/cientos";
 const { mixer } = defineProps<{
   mixer: AnimationMixer;
 }>();
+
+const showNavigation = useShowNavigation();
 </script>
 
 <template>
   <Html :position="[-1, 0, 0]">
-    <img
-      src="https://placehold.co/600x400/EEE/31343C"
-      width="100"
-      height="100"
-    />
+    <transition name="fade">
+      <img
+        v-show="showNavigation"
+        src="https://placehold.co/600x400/EEE/31343C"
+        width="100"
+        height="100"
+      />
+    </transition>
   </Html>
 
   <Html :position="[0.9, 0, 0]">
-    <img
-      src="https://placehold.co/600x400/EEE/31343C"
-      width="100"
-      height="100"
-    />
+    <transition name="fade">
+      <img
+        v-show="showNavigation"
+        src="https://placehold.co/600x400/EEE/31343C"
+        width="100"
+        height="100"
+      />
+    </transition>
   </Html>
 </template>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+.fade-enter-to,
+.fade-leave-from {
+  opacity: 1;
+}
+</style>

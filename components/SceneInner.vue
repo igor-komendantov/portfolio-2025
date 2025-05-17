@@ -2,7 +2,6 @@
 const { scene, nodes, animations } = await useGLTF("/models/book.glb");
 const { button_rotater: bookSnapMesh } = nodes;
 const { mixer } = useAnimations(animations, scene);
-
 </script>
 
 <template>
@@ -11,12 +10,17 @@ const { mixer } = useAnimations(animations, scene);
   <LightSources />
 
   <Suspense>
-    <BookSnap :mesh="bookSnapMesh" :animations="animations" :scene="scene" :mixer="mixer" />
+    <BookSnap
+      :mesh="bookSnapMesh"
+      :animations="animations"
+      :scene="scene"
+      :mixer="mixer"
+    />
   </Suspense>
 
   <Suspense>
     <primitive :object="scene" />
   </Suspense>
 
-  <PageNavigation :mixer="mixer"/>
+  <PageNavigation :mixer="mixer" />
 </template>
