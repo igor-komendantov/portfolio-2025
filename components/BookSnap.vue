@@ -8,13 +8,13 @@ const { animations, mesh, mixer } = defineProps<{
   mixer: AnimationMixer;
 }>();
 
-const showNavigation = useShowNavigation();
+const scene = useScene();
 
 const openBook = async () => {
   const turnFirstPage = prepareActionOfOpening(animations, mixer);
 
   await turnFirstPage();
-  showNavigation.value = true
+  scene.value.showNavigation = true
 };
 </script>
 

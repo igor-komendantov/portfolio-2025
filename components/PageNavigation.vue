@@ -6,13 +6,13 @@ const { mixer } = defineProps<{
   mixer: AnimationMixer;
 }>();
 
-const showNavigation = useShowNavigation();
+const scene = useScene();
 </script>
 
 <template>
   <Html :position="[-1, 0, 0]">
     <transition name="fade">
-      <button v-show="showNavigation">
+      <button v-show="scene.showNavigation">
         <img
           src="https://placehold.co/600x400/EEE/31343C"
           width="100"
@@ -24,7 +24,7 @@ const showNavigation = useShowNavigation();
 
   <Html :position="[0.9, 0, 0]">
     <transition name="fade">
-      <button v-show="showNavigation">
+      <button v-show="scene.showNavigation">
         <img
           src="https://placehold.co/600x400/EEE/31343C"
           width="100"
