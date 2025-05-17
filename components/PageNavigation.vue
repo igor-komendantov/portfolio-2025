@@ -12,6 +12,7 @@ const scene = useScene();
 const isPrevAvailable = computed(() => {
   return scene.value.pageStep !== 0;
 });
+const isNextAvailable = ref(true);
 
 const turnActions = prepareTurnAnimations();
 console.log(turnActions);
@@ -47,6 +48,12 @@ function turnNextPage() {
 
   scene.value.pageStep++;
   animation.play();
+
+  const isLastActionInArray = turnActions.length - 1 === indexOfAnimation;
+  // Truth means there is nothing more to turn in further call of turnNextPage()
+  if (isLastActionInArray) {
+    isNextAvailable.value = false;
+  }
 }
 </script>
 
@@ -68,7 +75,11 @@ function turnNextPage() {
 
   <Html :position="[0.9, 0, 0]">
     <transition name="fade">
-      <button v-show="scene.showNavigation" @click="turnNextPage">
+      <button
+        v-show="scene.showNavigation && isNextAvailable"
+        @click="turnNextPage"
+        :disabled="!isNextAvailable"
+      >
         <img
           src="https://placehold.co/600x400/EEE/31343C"
           width="100"
