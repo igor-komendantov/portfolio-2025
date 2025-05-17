@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import type { AnimationClip, AnimationMixer, Object3D, Scene } from "three";
 
-const { animations, mesh, mixer } = defineProps<{
-  mesh: Object3D;
-  animations: AnimationClip[];
-  scene: Scene;
+const { mixer } = defineProps<{
+  // mesh: Object3D;
+  // animations: AnimationClip[];
+  // scene: Scene;
   mixer: AnimationMixer;
 }>();
 
 const scene = useScene();
 
 const openBook = async () => {
-  const turnFirstPage = prepareActionOfOpening(animations, mixer);
+  const turnFirstPage = prepareActionOfOpening(scene.value.gltf.animations, mixer);
 
   await turnFirstPage();
   scene.value.showNavigation = true
@@ -19,5 +19,5 @@ const openBook = async () => {
 </script>
 
 <template>
-  <primitive :object="mesh" @click="openBook" />
+  <primitive :object="scene.gltf?.nodes.button_rotater" @click="openBook" />
 </template>
