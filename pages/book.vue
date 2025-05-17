@@ -1,7 +1,7 @@
-<script setup lang="ts">
-import Scene from "@/src/book/Scene.vue";
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <Scene />
+  <ClientOnly>
+    <Scene />
+  </ClientOnly>
 </template>
