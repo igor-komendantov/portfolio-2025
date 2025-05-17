@@ -12,23 +12,25 @@ const showNavigation = useShowNavigation();
 <template>
   <Html :position="[-1, 0, 0]">
     <transition name="fade">
-      <img
-        v-show="showNavigation"
-        src="https://placehold.co/600x400/EEE/31343C"
-        width="100"
-        height="100"
-      />
+      <button v-show="showNavigation">
+        <img
+          src="https://placehold.co/600x400/EEE/31343C"
+          width="100"
+          height="100"
+        />
+      </button>
     </transition>
   </Html>
 
   <Html :position="[0.9, 0, 0]">
     <transition name="fade">
-      <img
-        v-show="showNavigation"
-        src="https://placehold.co/600x400/EEE/31343C"
-        width="100"
-        height="100"
-      />
+      <button v-show="showNavigation">
+        <img
+          src="https://placehold.co/600x400/EEE/31343C"
+          width="100"
+          height="100"
+        />
+      </button>
     </transition>
   </Html>
 </template>
