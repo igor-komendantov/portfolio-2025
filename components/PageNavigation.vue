@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { AnimationMixer } from "three";
+import { LoopOnce, type AnimationMixer } from "three";
 import { Html, type GLTFResult } from "@tresjs/cientos";
 
 const { mixer, gltf } = defineProps<{
@@ -12,6 +12,26 @@ const scene = useScene();
 const isPrevAvailable = computed(() => {
   return scene.value.pageStep !== 0;
 });
+
+const turnActions = prepareTurnActions();
+console.log(turnActions);
+function prepareTurnActions() {
+  const rawAnimations = gltf.animations.filter((animation) => {
+    return (
+      animation.name.includes("Turn list") && animation.name !== "Turn list 1"
+    );
+  });
+
+  const readyActions = rawAnimations.map((animation) => {
+    const action = mixer.clipAction(animation);
+    action.setLoop(LoopOnce, 1);
+    action.clampWhenFinished = true;
+
+    return action;
+  });
+
+  return readyActions;
+}
 </script>
 
 <template>
