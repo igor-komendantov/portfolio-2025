@@ -1,13 +1,6 @@
 <script setup lang="ts">
-
 const { scene, nodes, animations } = await useGLTF("/models/book.glb");
-
-
-
-const { button_rotater: bookSnapMesh, ...restMeshes } = nodes;
-
-const { mixer } = useAnimations(animations, scene);
-const openBook = prepareActionOfOpening(animations, mixer);
+const { button_rotater: bookSnapMesh } = nodes;
 </script>
 
 <template>
@@ -17,12 +10,13 @@ const openBook = prepareActionOfOpening(animations, mixer);
     <LightSources />
 
     <Suspense>
-      <primitive :object="bookSnapMesh" @click="openBook" />
+      <BookSnap :mesh="bookSnapMesh" :animations="animations" :scene="scene" />
     </Suspense>
 
     <Suspense>
-      <primitive :object="restMeshes" />
+      <primitive :object="scene" />
     </Suspense>
+
     <PageNavigation />
   </TresCanvas>
 </template>
