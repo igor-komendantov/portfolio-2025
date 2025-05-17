@@ -13,24 +13,40 @@ const isPrevAvailable = computed(() => {
   return scene.value.pageStep !== 0;
 });
 
-const turnActions = prepareTurnActions();
+const turnActions = prepareTurnAnimations();
 console.log(turnActions);
-function prepareTurnActions() {
+function prepareTurnAnimations() {
   const rawAnimations = gltf.animations.filter((animation) => {
     return (
       animation.name.includes("Turn list") && animation.name !== "Turn list 1"
     );
   });
 
-  const readyActions = rawAnimations.map((animation) => {
-    const action = mixer.clipAction(animation);
-    action.setLoop(LoopOnce, 1);
-    action.clampWhenFinished = true;
+  const readyAnimations = rawAnimations.map((rawAnimation) => {
+    const animation = mixer.clipAction(rawAnimation);
+    animation.setLoop(LoopOnce, 1);
+    animation.clampWhenFinished = true;
 
-    return action;
+    return animation;
   });
 
-  return readyActions;
+  return readyAnimations;
+}
+
+function turnNextPage() {
+  const indexOfAnimation = scene.value.pageStep - 1;
+  const animation = turnActions[indexOfAnimation];
+
+  console.log(indexOfAnimation, animation);
+
+  if (indexOfAnimation < 0 || !animation) {
+    throw Error(
+      `Error while searching animation. Supposed index: ${indexOfAnimation}.`
+    );
+  }
+
+  scene.value.pageStep++;
+  animation.play();
 }
 </script>
 
@@ -52,7 +68,7 @@ function prepareTurnActions() {
 
   <Html :position="[0.9, 0, 0]">
     <transition name="fade">
-      <button v-show="scene.showNavigation">
+      <button v-show="scene.showNavigation" @click="turnNextPage">
         <img
           src="https://placehold.co/600x400/EEE/31343C"
           width="100"
