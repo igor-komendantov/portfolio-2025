@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import type { AnimationMixer } from "three";
-import { Html } from "@tresjs/cientos";
+import { Html, type GLTFResult } from "@tresjs/cientos";
 
-const { mixer } = defineProps<{
+const { mixer, gltf } = defineProps<{
   mixer: AnimationMixer;
+  gltf: GLTFResult;
 }>();
 
 const scene = useScene();

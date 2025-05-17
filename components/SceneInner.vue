@@ -1,7 +1,6 @@
 <script setup lang="ts">
-const { scene, nodes, animations } = await useGLTF("/models/book.glb");
-const { button_rotater: bookSnapMesh } = nodes;
-const { mixer } = useAnimations(animations, scene);
+const gltf = await useGLTF("/models/book.glb");
+const { mixer } = useAnimations(gltf.animations, gltf.scene);
 </script>
 
 <template>
@@ -11,16 +10,14 @@ const { mixer } = useAnimations(animations, scene);
 
   <Suspense>
     <BookSnap
-      :mesh="bookSnapMesh"
-      :animations="animations"
-      :scene="scene"
+      :gltf="gltf"
       :mixer="mixer"
     />
   </Suspense>
 
   <Suspense>
-    <primitive :object="scene" />
+    <primitive :object="gltf.scene" />
   </Suspense>
 
-  <PageNavigation :mixer="mixer" />
+  <PageNavigation :mixer="mixer" :gltf="gltf"/>
 </template>

@@ -1,23 +1,22 @@
 <script setup lang="ts">
-import type { AnimationClip, AnimationMixer, Object3D, Scene } from "three";
+import type { GLTFResult } from "@tresjs/cientos";
+import type { AnimationMixer } from "three";
 
-const { animations, mesh, mixer } = defineProps<{
-  mesh: Object3D;
-  animations: AnimationClip[];
-  scene: Scene;
+const { gltf, mixer } = defineProps<{
+  gltf: GLTFResult;
   mixer: AnimationMixer;
 }>();
 
 const scene = useScene();
 
 const openBook = async () => {
-  const turnFirstPage = prepareActionOfOpening(animations, mixer);
+  const turnFirstPage = prepareActionOfOpening(gltf.animations, mixer);
 
   await turnFirstPage();
-  scene.value.showNavigation = true
+  scene.value.showNavigation = true;
 };
 </script>
 
 <template>
-  <primitive :object="mesh" @click="openBook" />
+  <primitive :object="gltf.nodes.button_rotater" @click="openBook" />
 </template>
