@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import type { AnimationClip, Object3D } from "three";
+import type { AnimationClip, Object3D, Scene } from "three";
 
-const { animations, mesh } = defineProps<{
+const { animations, mesh, scene } = defineProps<{
   mesh: Object3D;
   animations: AnimationClip[];
+  scene: Scene;
 }>();
 
-const scene = useState('scene')
-const openBook = prepareActionOfOpening(animations, scene.value.animationMixer);
+const { mixer } = useAnimations(animations, scene);
+const openBook = prepareActionOfOpening(animations, mixer);
 </script>
 
 <template>
