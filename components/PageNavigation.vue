@@ -7,17 +7,25 @@ const { mixer } = defineProps<{
 }>();
 
 const scene = useScene();
+
+const isPrevAvailable = computed(() => {
+  return scene.value.pageStep !== 0;
+});
 </script>
 
 <template>
   <Html :position="[-1, 0, 0]">
     <transition name="fade">
-      <button v-show="scene.showNavigation">
+      <button
+        v-show="scene.showNavigation && isPrevAvailable"
+        :disabled="!isPrevAvailable"
+      >
         <img
           src="https://placehold.co/600x400/EEE/31343C"
           width="100"
           height="100"
         />
+        <h1>{{ isPrevAvailable }}</h1>
       </button>
     </transition>
   </Html>
