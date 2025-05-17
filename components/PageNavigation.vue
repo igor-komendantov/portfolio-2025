@@ -26,7 +26,6 @@ const isPrevAvailable = computed(() => {
           width="100"
           height="100"
         />
-        <h1>{{ isPrevAvailable }}</h1>
       </button>
     </transition>
   </Html>
