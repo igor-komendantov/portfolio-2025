@@ -9,9 +9,9 @@ const { gltf, mixer } = defineProps<{
 
 const scene = useScene();
 
-const openBook = async () => {
-  const turnFirstPage = prepareActionOfOpening(gltf.animations, mixer);
+const turnFirstPage = prepareActionOfOpening(gltf.animations, mixer);
 
+const openBook = async () => {
   await turnFirstPage();
   scene.value.showNavigation = true;
 };
