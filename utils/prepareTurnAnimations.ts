@@ -1,11 +1,16 @@
 import { LoopOnce, type AnimationClip, type AnimationMixer } from "three";
 
-export function prepareTurnAnimations(animations: AnimationClip[], mixer: AnimationMixer) {
-  const rawAnimations = animations.filter((animation) => {
-    return (
-      animation.name.includes("Turn list") && animation.name !== "Turn list 1"
-    );
-  });
+export function prepareTurnAnimations(
+  animations: AnimationClip[],
+  mixer: AnimationMixer
+) {
+  const rawAnimations = animations
+    .filter((animation) => {
+      return (
+        animation.name.includes("Turn list") && animation.name !== "Turn list 1"
+      );
+    })
+    .map(shiftAnimationClipToZero);
 
   const readyAnimations = rawAnimations.map((rawAnimation) => {
     const animation = mixer.clipAction(rawAnimation);
