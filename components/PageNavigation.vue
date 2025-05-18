@@ -11,6 +11,7 @@ const scene = useScene();
 
 const isPrevAvailable = ref(false);
 const isNextAvailable = ref(true);
+const turning = ref(false);
 
 const turnActions = prepareTurnAnimations(gltf.animations, mixer);
 
@@ -20,6 +21,7 @@ function turnNextPage() {
       `Action "turnNextPage" should not be called since isNextAvailable is false`
     );
   }
+  turning.value = true;
 
   const indexOfAnimation = scene.value.pageStep - 1;
   const animation = turnActions[indexOfAnimation];
@@ -33,6 +35,15 @@ function turnNextPage() {
   }
 
   scene.value.pageStep++;
+
+  const onAnimationFinished = (event: any) => {
+    if (event.action === animation) {
+      mixer.removeEventListener("finished", onAnimationFinished);
+      turning.value = false;
+    }
+  };
+
+  mixer.addEventListener("finished", onAnimationFinished);
   animation.play();
   isPrevAvailable.value = true;
 
@@ -49,6 +60,7 @@ function turnPrevPage() {
       `Action "turnPrevPage" should not be called since isPrevAvailable is false`
     );
   }
+  turning.value = true;
 
   const indexOfAnimation = scene.value.pageStep - 2;
   const animation = turnActions[indexOfAnimation];
@@ -73,6 +85,7 @@ function turnPrevPage() {
       animation.stop();
       animation.timeScale = 1;
       animation.reset();
+      turning.value = false;
       mixer.removeEventListener("finished", onAnimationFinished);
     }
   };
@@ -92,7 +105,7 @@ function turnPrevPage() {
     <transition name="fade">
       <button
         v-show="scene.showNavigation && isPrevAvailable"
-        :disabled="!isPrevAvailable"
+        :disabled="!isPrevAvailable || turning"
         @click="turnPrevPage"
       >
         <img
@@ -109,7 +122,7 @@ function turnPrevPage() {
       <button
         v-show="scene.showNavigation && isNextAvailable"
         @click="turnNextPage"
-        :disabled="!isNextAvailable"
+        :disabled="!isNextAvailable || turning"
       >
         <img
           src="https://placehold.co/600x400/EEE/31343C"
@@ -117,6 +130,7 @@ function turnPrevPage() {
           height="100"
         />
         <h1>step: {{ scene.pageStep }}</h1>
+        <h1>{{ turning }}</h1>
       </button>
     </transition>
   </Html>
