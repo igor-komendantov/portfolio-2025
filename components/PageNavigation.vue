@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { LoopOnce, type AnimationMixer } from "three";
+import { AnimationClip, LoopOnce, type AnimationMixer } from "three";
 import { Html, type GLTFResult } from "@tresjs/cientos";
 
 const { mixer, gltf } = defineProps<{
@@ -9,32 +9,18 @@ const { mixer, gltf } = defineProps<{
 
 const scene = useScene();
 
-const isPrevAvailable = computed(() => {
-  return scene.value.pageStep !== 0;
-});
+const isPrevAvailable = ref(false);
 const isNextAvailable = ref(true);
 
-const turnActions = prepareTurnAnimations();
-console.log(turnActions);
-function prepareTurnAnimations() {
-  const rawAnimations = gltf.animations.filter((animation) => {
-    return (
-      animation.name.includes("Turn list") && animation.name !== "Turn list 1"
-    );
-  });
-
-  const readyAnimations = rawAnimations.map((rawAnimation) => {
-    const animation = mixer.clipAction(rawAnimation);
-    animation.setLoop(LoopOnce, 1);
-    animation.clampWhenFinished = true;
-
-    return animation;
-  });
-
-  return readyAnimations;
-}
+const turnActions = prepareTurnAnimations(gltf.animations);
 
 function turnNextPage() {
+  if (!isNextAvailable.value) {
+    throw Error(
+      `Action "turnNextPage" should not be called since isNextAvailable is false`
+    );
+  }
+
   const indexOfAnimation = scene.value.pageStep - 1;
   const animation = turnActions[indexOfAnimation];
 
@@ -48,11 +34,56 @@ function turnNextPage() {
 
   scene.value.pageStep++;
   animation.play();
+  isPrevAvailable.value = true;
 
   const isLastActionInArray = turnActions.length - 1 === indexOfAnimation;
   // Truth means there is nothing more to turn in further call of turnNextPage()
   if (isLastActionInArray) {
     isNextAvailable.value = false;
+  }
+}
+
+function turnPrevPage() {
+  if (!isPrevAvailable.value) {
+    throw Error(
+      `Action "turnPrevPage" should not be called since isPrevAvailable is false`
+    );
+  }
+
+  const indexOfAnimation = scene.value.pageStep - 2;
+  const animation = turnActions[indexOfAnimation];
+
+  if (indexOfAnimation < 0 || !animation) {
+    throw Error(
+      `Error while searching animation. Supposed index: ${indexOfAnimation}.`
+    );
+  }
+
+  scene.value.pageStep--;
+
+  animation.stop();
+  animation.setLoop(LoopOnce, 1);
+  animation.clampWhenFinished = true;
+  animation.timeScale = -1;
+  animation.reset();
+  animation.time = animation.getClip().duration;
+  animation.play();
+
+  // Важно: ловим окончание через mixer
+  const onAnimationFinished = (event: any) => {
+    if (event.action === animation) {
+      animation.stop(); // <-- критично
+      animation.timeScale = 1;
+      animation.reset(); // теперь безопасно
+      mixer.removeEventListener("finished", onAnimationFinished);
+    }
+  };
+
+  mixer.addEventListener("finished", onAnimationFinished);
+
+  isNextAvailable.value = true;
+  if (indexOfAnimation === 0) {
+    isPrevAvailable.value = false;
   }
 }
 </script>
@@ -63,6 +94,7 @@ function turnNextPage() {
       <button
         v-show="scene.showNavigation && isPrevAvailable"
         :disabled="!isPrevAvailable"
+        @click="turnPrevPage"
       >
         <img
           src="https://placehold.co/600x400/EEE/31343C"
@@ -85,6 +117,7 @@ function turnNextPage() {
           width="100"
           height="100"
         />
+        <h1>step: {{ scene.pageStep }}</h1>
       </button>
     </transition>
   </Html>
