@@ -26,7 +26,6 @@ function turnNextPage() {
   const indexOfAnimation = scene.value.pageStep - 1;
   const animation = turnActions[indexOfAnimation];
 
-  console.log(indexOfAnimation, animation);
 
   if (indexOfAnimation < 0 || !animation) {
     throw Error(
