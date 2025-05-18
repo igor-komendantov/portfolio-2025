@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { AnimationClip, LoopOnce, type AnimationMixer } from "three";
 import { Html, type GLTFResult } from "@tresjs/cientos";
+import { LoopOnce, type AnimationMixer } from "three";
 
 const { mixer, gltf } = defineProps<{
   mixer: AnimationMixer;
@@ -12,7 +12,7 @@ const scene = useScene();
 const isPrevAvailable = ref(false);
 const isNextAvailable = ref(true);
 
-const turnActions = prepareTurnAnimations(gltf.animations);
+const turnActions = prepareTurnAnimations(gltf.animations, mixer);
 
 function turnNextPage() {
   if (!isNextAvailable.value) {
@@ -67,19 +67,18 @@ function turnPrevPage() {
   animation.timeScale = -1;
   animation.reset();
   animation.time = animation.getClip().duration;
-  animation.play();
 
-  // Важно: ловим окончание через mixer
   const onAnimationFinished = (event: any) => {
     if (event.action === animation) {
-      animation.stop(); // <-- критично
+      animation.stop();
       animation.timeScale = 1;
-      animation.reset(); // теперь безопасно
+      animation.reset();
       mixer.removeEventListener("finished", onAnimationFinished);
     }
   };
 
   mixer.addEventListener("finished", onAnimationFinished);
+  animation.play();
 
   isNextAvailable.value = true;
   if (indexOfAnimation === 0) {
