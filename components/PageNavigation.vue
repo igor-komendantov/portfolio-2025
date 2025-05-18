@@ -101,34 +101,28 @@ function turnPrevPage() {
 </script>
 
 <template>
-  <Html :position="[-1, 0, 0]">
+  <Html :position="[-1, 0, 0.35]">
     <transition name="fade">
       <button
+        class="nav-button"
         v-show="scene.showNavigation && isPrevAvailable"
         :disabled="!isPrevAvailable || turning"
         @click="turnPrevPage"
       >
-        <img
-          src="https://placehold.co/600x400/EEE/31343C"
-          width="100"
-          height="100"
-        />
+        <img src="/images/button-prev.svg" width="170" />
       </button>
     </transition>
   </Html>
 
-  <Html :position="[0.9, 0, 0]">
+  <Html :position="[0.9, 0, 0.35]">
     <transition name="fade">
       <button
+        class="nav-button"
         v-show="scene.showNavigation && isNextAvailable"
         @click="turnNextPage"
         :disabled="!isNextAvailable || turning"
       >
-        <img
-          src="https://placehold.co/600x400/EEE/31343C"
-          width="100"
-          height="100"
-        />
+        <img src="/images/button-next.svg" width="170" />
       </button>
     </transition>
   </Html>
@@ -146,5 +140,17 @@ function turnPrevPage() {
 .fade-enter-to,
 .fade-leave-from {
   opacity: 1;
+}
+
+.nav-button {
+  background: none;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  transition: all ease-in 0.5s;
+}
+.nav-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.3;
 }
 </style>
