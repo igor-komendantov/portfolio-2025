@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const gltf = await useGLTF("/models/book.glb");
 const { mixer } = useAnimations(gltf.animations, gltf.scene);
-console.log(gltf.nodes);
+usePhotoClickHandler(gltf);
 </script>
 
 <template>
