@@ -4,7 +4,7 @@ const { mixer } = useAnimations(gltf.animations, gltf.scene);
 </script>
 
 <template>
-  <TresPerspectiveCamera :position="[0, 1.2, 0]" :look-at="[0, 0, 0]" />
+  <TresPerspectiveCamera :position="[0, 1.2, 0.3]" :look-at="[0, 0, 0]" />
   <LightSources />
 
   <Suspense>
