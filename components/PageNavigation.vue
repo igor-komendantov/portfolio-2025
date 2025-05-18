@@ -129,8 +129,6 @@ function turnPrevPage() {
           width="100"
           height="100"
         />
-        <h1>step: {{ scene.pageStep }}</h1>
-        <h1>{{ turning }}</h1>
       </button>
     </transition>
   </Html>
