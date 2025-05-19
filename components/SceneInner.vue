@@ -17,6 +17,4 @@ usePhotoClickHandler(gltf);
   </Suspense>
 
   <PageNavigation :mixer="mixer" :gltf="gltf" />
-
-  <LinkOnPaper :gltf="gltf" />
 </template>
