@@ -4,6 +4,7 @@ const { mixer } = useAnimations(gltf.animations, gltf.scene);
 
 usePhotoClickHandler(gltf);
 usePrepareTurnAnimations(gltf, mixer);
+useContactsClickHandler(gltf);
 </script>
 
 <template>
@@ -17,5 +18,4 @@ usePrepareTurnAnimations(gltf, mixer);
   <Suspense>
     <primitive :object="gltf.scene" />
   </Suspense>
-
 </template>
