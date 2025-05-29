@@ -93,4 +93,10 @@ export function usePrepareTurnAnimations(
 
   scene.value.turnNextPage = turnNextPage;
   scene.value.turnPrevPage = turnPrevPage;
+
+  onMounted(() => {
+    turnActions.forEach((animation) => {
+      animation.play();
+    });
+  });
 }
