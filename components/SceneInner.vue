@@ -1,5 +1,8 @@
 <script setup lang="ts">
+const scene = useScene();
 const gltf = await useGLTF("/models/book.glb");
+scene.value.gltfStatus = 'ready';
+
 const { mixer } = useAnimations(gltf.animations, gltf.scene);
 
 usePhotoClickHandler(gltf);
@@ -11,11 +14,7 @@ handleLinksOnMeshes(gltf);
   <TresPerspectiveCamera :position="[0, 1.2, 0.3]" :look-at="[0, 0, 0]" />
   <LightSources />
 
-  <Suspense>
-    <BookSnap :gltf="gltf" :mixer="mixer" />
-  </Suspense>
+  <BookSnap :gltf="gltf" :mixer="mixer" />
 
-  <Suspense>
-    <primitive :object="gltf.scene" />
-  </Suspense>
+  <primitive :object="gltf.scene" />
 </template>
