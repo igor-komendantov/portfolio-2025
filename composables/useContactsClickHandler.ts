@@ -13,9 +13,10 @@ export function useContactsClickHandler(gltf: GLTFResult) {
   watch(
     () => scene.value.pageStep,
     (step, prevStep) => {
-      const mesh = gltf.scene.getObjectByName("list_8_mesh") as Mesh;
+      const meshWithEmail = gltf.scene.getObjectByName("list_8_mesh") as Mesh;
+      const meshWithLinks = gltf.scene.getObjectByName("list_9_mesh") as Mesh;
       const domEl = renderer.value?.domElement;
-      if (!mesh || !domEl) return;
+      if (!meshWithEmail || !domEl) return;
 
       if (step === 8) {
         handleClick = (event: MouseEvent) => {
@@ -26,20 +27,61 @@ export function useContactsClickHandler(gltf: GLTFResult) {
           mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
           raycaster.setFromCamera(mouse, camera.value);
-          const intersects = raycaster.intersectObject(mesh, true);
-          if (intersects.length > 0) {
-            const intersection = intersects[0];
-            const localPoint = mesh.worldToLocal(intersection.point.clone());
-            // console.log(localPoint);
+          const emailIntersects = raycaster.intersectObject(
+            meshWithEmail,
+            true
+          );
+          const linksIntersects = raycaster.intersectObject(
+            meshWithLinks,
+            true
+          );
+          if (emailIntersects.length > 0) {
+            const intersection = emailIntersects[0];
+            const emailPagePoint = meshWithEmail.worldToLocal(
+              intersection.point.clone()
+            );
 
+            // email
             if (
-              localPoint.z >= 0.037590497299288594 &&
-              localPoint.z <= 0.17834934081423326 &&
-              localPoint.x >= -0.393928821891629 &&
-              localPoint.x <= 0.3698629609054239
+              emailPagePoint.z >= 0.037590497299288594 &&
+              emailPagePoint.z <= 0.17834934081423326 &&
+              emailPagePoint.x >= -0.393928821891629 &&
+              emailPagePoint.x <= 0.3698629609054239
             ) {
-              navigator.clipboard.writeText("igor.komendantov.deal@gmail.com");
+              navigator.clipboard.writeText("email placeholder");
               console.log("copied");
+            }
+          }
+
+          if (linksIntersects.length > 0) {
+            const intersection = linksIntersects[0];
+            const linksPagePoint = meshWithLinks.worldToLocal(
+              intersection.point.clone()
+            );
+
+            console.log(
+              linksPagePoint,
+              linksPagePoint.x >= -0.002364559471120631 &&
+                linksPagePoint.x <= -0.28894147175055396
+            );
+            // linked in
+            if (
+              linksPagePoint.x <= -0.002364559471120631 &&
+              linksPagePoint.x >= -0.28894147175055396 &&
+              linksPagePoint.z >= -0.06491567554876015 &&
+              linksPagePoint.z <= 0.02791815187390262
+            ) {
+              window.open("https://linkedin.com", "_blank");
+            }
+
+            // gh
+            if (
+              linksPagePoint.z >= 0.15561072674615944 &&
+              linksPagePoint.z <= 0.23959869589342925 &&
+              linksPagePoint.x <= -0.05359185384468218 &&
+              linksPagePoint.x >= -0.2860870724292083
+            ) {
+              window.open("https://linkedin.com", "_blank");
             }
           }
         };
@@ -52,10 +94,12 @@ export function useContactsClickHandler(gltf: GLTFResult) {
           mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
           raycaster.setFromCamera(mouse, camera.value);
-          const intersects = raycaster.intersectObject(mesh, true);
+          const intersects = raycaster.intersectObject(meshWithEmail, true);
           if (intersects.length > 0) {
             const intersection = intersects[0];
-            const localPoint = mesh.worldToLocal(intersection.point.clone());
+            const localPoint = meshWithEmail.worldToLocal(
+              intersection.point.clone()
+            );
 
             // if (localPoint.z > 0) {
             //   domEl.style.cursor = "pointer";
