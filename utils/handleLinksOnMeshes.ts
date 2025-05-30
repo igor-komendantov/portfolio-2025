@@ -50,19 +50,14 @@ export function handleLinksOnMeshes(gltf: GLTFResult) {
           mouse
         );
 
-        /**
-         * Check whether ray pierced certain page.
-         * Pierced page === clicked page.
-         */
-
+        // Check whether ray pierced certain page.
+        // Pierced page === clicked page.
         const emailPageIntersection = getPageIntersection(
           raycaster,
           meshesOfPages.emailPageMesh
         );
         if (emailPageIntersection) {
           const emailPagePoint = meshesOfPages.emailPageMesh.worldToLocal(
-            // NOTE: i removed method clone() because anyway i will remove this ray after handling a click. Cloning doesn't have sense
-            // TODO: remove ray after handling a click
             emailPageIntersection.point
           );
 
