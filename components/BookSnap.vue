@@ -14,12 +14,8 @@ const turnFirstPage = prepareActionOfOpening(gltf.animations, mixer);
 const openBook = async () => {
   await turnFirstPage();
   scene.value.showNavigation = true;
-  scene.value.pageStep = 1;
+  scene.value.pageStep = 1
 };
-
-onMounted(() => {
-  openBook();
-});
 </script>
 
 <template>
