@@ -17,9 +17,8 @@ const openBook = async () => {
   scene.value.pageStep = 1;
 };
 
-onMounted(async () => {
-  await openBook();
-  scene.value.pageStep = 8;
+onMounted(() => {
+  openBook();
 });
 </script>
 
