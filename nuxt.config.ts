@@ -42,6 +42,9 @@ export default defineNuxtConfig({
           },
         },
       },
+
+      meshWithEmail: "list_8_mesh",
+      meshWithLinks: "list_9_mesh",
     },
   },
 });

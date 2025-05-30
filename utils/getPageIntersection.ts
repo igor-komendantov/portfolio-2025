@@ -1,6 +1,6 @@
-import type { Mesh, Raycaster } from "three";
+import type { Object3D, Raycaster } from "three";
 
-export function getPageIntersection(raycaster: Raycaster, pageMesh: Mesh) {
+export function getPageIntersection(raycaster: Raycaster, pageMesh: Object3D) {
   const intersections = raycaster.intersectObject(pageMesh, true);
   /**
    * Page mesh is flat.

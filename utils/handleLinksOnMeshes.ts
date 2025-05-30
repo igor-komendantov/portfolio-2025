@@ -1,5 +1,5 @@
 import type { GLTFResult } from "@tresjs/cientos";
-import { type Mesh, Raycaster, Vector2 } from "three";
+import { Raycaster, Vector2 } from "three";
 
 export function handleLinksOnMeshes(gltf: GLTFResult) {
   const scene = useScene();
@@ -8,15 +8,9 @@ export function handleLinksOnMeshes(gltf: GLTFResult) {
   const mouse = new Vector2();
   const appConfig = useNuxtApp();
 
-  const MESH_WITH_EMAIL_BUTTON = "list_8_mesh";
-  const meshWithEmail = gltf.scene.getObjectByName(
-    MESH_WITH_EMAIL_BUTTON
-  ) as Mesh;
+  const meshesOfPages = getMeshesOfContactPages(gltf);
 
-  const MESH_WITH_LINKS = "list_9_mesh";
-  const meshWithLinks = gltf.scene.getObjectByName(MESH_WITH_LINKS) as Mesh;
-
-  let handleClick: ((event: MouseEvent) => void) | null = null;
+  let handleClickOnCanvas: ((event: MouseEvent) => void) | null = null;
 
   function copyEmail() {
     navigator.clipboard.writeText(appConfig.$config.public.email);
@@ -44,10 +38,10 @@ export function handleLinksOnMeshes(gltf: GLTFResult) {
         return;
       }
 
-      handleClick = (event: MouseEvent) => {
+      handleClickOnCanvas = (event: MouseEvent) => {
         if (!camera.value || !renderer.value) return;
 
-        // throw a ray from cursor through book
+        // Throw a ray from cursor through book
         setRayFromMouse(
           event,
           camera.value,
@@ -63,14 +57,10 @@ export function handleLinksOnMeshes(gltf: GLTFResult) {
 
         const emailPageIntersection = getPageIntersection(
           raycaster,
-          meshWithEmail
-        );
-        const linksPageIntersection = getPageIntersection(
-          raycaster,
-          meshWithLinks
+          meshesOfPages.emailPageMesh
         );
         if (emailPageIntersection) {
-          const emailPagePoint = meshWithEmail.worldToLocal(
+          const emailPagePoint = meshesOfPages.emailPageMesh.worldToLocal(
             // NOTE: i removed method clone() because anyway i will remove this ray after handling a click. Cloning doesn't have sense
             // TODO: remove ray after handling a click
             emailPageIntersection.point
@@ -84,12 +74,17 @@ export function handleLinksOnMeshes(gltf: GLTFResult) {
 
           if (isEmailButtonClicked) {
             copyEmail();
-            return;
           }
+          return;
         }
 
+        const linksPageIntersection = getPageIntersection(
+          raycaster,
+          meshesOfPages.linksPageMesh
+        );
+
         if (linksPageIntersection) {
-          const linksPagePoint = meshWithLinks.worldToLocal(
+          const linksPagePoint = meshesOfPages.linksPageMesh.worldToLocal(
             linksPageIntersection.point
           );
 
@@ -117,13 +112,13 @@ export function handleLinksOnMeshes(gltf: GLTFResult) {
         }
       };
 
-      window.addEventListener("click", handleClick);
+      window.addEventListener("click", handleClickOnCanvas);
     }
   );
 
   onUnmounted(() => {
-    if (handleClick) {
-      window.removeEventListener("click", handleClick);
+    if (handleClickOnCanvas) {
+      window.removeEventListener("click", handleClickOnCanvas);
     }
   });
 }
