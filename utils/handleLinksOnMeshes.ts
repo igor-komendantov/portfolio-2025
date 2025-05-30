@@ -18,39 +18,6 @@ export function handleLinksOnMeshes(gltf: GLTFResult) {
 
   let handleClick: ((event: MouseEvent) => void) | null = null;
 
-  const buttonsCoordinates = {
-    email: {
-      topLeft: {
-        x: -0.393928821891629,
-        z: 0.037590497299288594,
-      },
-      bottomRight: {
-        x: 0.3698629609054239,
-        z: 0.17834934081423326,
-      },
-    },
-    linkedIn: {
-      topLeft: {
-        x: -0.28894147175055396,
-        z: -0.06491567554876015,
-      },
-      bottomRight: {
-        x: -0.002364559471120631,
-        z: 0.02791815187390262,
-      },
-    },
-    github: {
-      topLeft: {
-        x: -0.2860870724292083,
-        z: 0.15561072674615944,
-      },
-      bottomRight: {
-        x: -0.05359185384468218,
-        z: 0.23959869589342925,
-      },
-    },
-  };
-
   function copyEmail() {
     navigator.clipboard.writeText(appConfig.$config.public.email);
     console.log("copied");
@@ -112,7 +79,7 @@ export function handleLinksOnMeshes(gltf: GLTFResult) {
           // email
           const isEmailButtonClicked = rectangleContainsVector3(
             emailPagePoint,
-            buttonsCoordinates.email
+            appConfig.$config.public.linksLocalCoordinates.email
           );
 
           if (isEmailButtonClicked) {
@@ -129,7 +96,7 @@ export function handleLinksOnMeshes(gltf: GLTFResult) {
           // linked in
           const isLinkedInClicked = rectangleContainsVector3(
             linksPagePoint,
-            buttonsCoordinates.linkedIn
+            appConfig.$config.public.linksLocalCoordinates.linkedIn
           );
 
           if (isLinkedInClicked) {
@@ -140,7 +107,7 @@ export function handleLinksOnMeshes(gltf: GLTFResult) {
           // gh
           const isGithubClicked = rectangleContainsVector3(
             linksPagePoint,
-            buttonsCoordinates.github
+            appConfig.$config.public.linksLocalCoordinates.github
           );
 
           if (isGithubClicked) {
