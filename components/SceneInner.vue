@@ -4,7 +4,7 @@ const { mixer } = useAnimations(gltf.animations, gltf.scene);
 
 usePhotoClickHandler(gltf);
 usePrepareTurnAnimations(gltf, mixer);
-useContactsClickHandler(gltf);
+handleLinksOnMeshes(gltf);
 </script>
 
 <template>
