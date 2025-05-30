@@ -17,7 +17,6 @@ export function handleLinksOnMeshes(gltf: GLTFResult) {
   const meshWithLinks = gltf.scene.getObjectByName(MESH_WITH_LINKS) as Mesh;
 
   let handleClick: ((event: MouseEvent) => void) | null = null;
-  let handleMouseMove: ((event: MouseEvent) => void) | null = null;
 
   const buttonsCoordinates = {
     email: {
@@ -151,40 +150,13 @@ export function handleLinksOnMeshes(gltf: GLTFResult) {
         }
       };
 
-      handleMouseMove = (event: MouseEvent) => {
-        if (!camera.value || !renderer.value) return;
-
-        const rect = renderer.value.domElement.getBoundingClientRect();
-        mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-        mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-
-        raycaster.setFromCamera(mouse, camera.value);
-        const intersects = raycaster.intersectObject(meshWithEmail, true);
-        if (intersects.length > 0) {
-          const intersection = intersects[0];
-          const localPoint = meshWithEmail.worldToLocal(
-            intersection.point.clone()
-          );
-
-          // if (localPoint.z > 0) {
-          //   domEl.style.cursor = "pointer";
-          //   return;
-          // }
-        }
-        renderer.value.domElement.style.cursor = "default";
-      };
-
       window.addEventListener("click", handleClick);
-      window.addEventListener("mousemove", handleMouseMove);
     }
   );
 
   onUnmounted(() => {
-    if (handleClick) window.removeEventListener("click", handleClick);
-    if (handleMouseMove)
-      window.removeEventListener("mousemove", handleMouseMove);
-    if (renderer.value?.domElement) {
-      renderer.value.domElement.style.cursor = "default";
+    if (handleClick) {
+      window.removeEventListener("click", handleClick);
     }
   });
 }
