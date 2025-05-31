@@ -11,6 +11,7 @@ export function handleLinksOnMeshes(gltf: GLTFResult) {
   const meshesOfPages = getMeshesOfContactPages(gltf);
 
   let handleClickOnCanvas: ((event: MouseEvent) => void) | null = null;
+  let handleMouseMoveOnCanvas: ((event: MouseEvent) => void) | null = null;
 
   function copyEmail() {
     navigator.clipboard.writeText(appConfig.$config.public.email);
@@ -35,13 +36,23 @@ export function handleLinksOnMeshes(gltf: GLTFResult) {
       const isContactPageOpened = pageStep === 8;
 
       if (!isContactPageOpened) {
+        // Удаляем обработчики, если ушли со страницы
+        if (handleClickOnCanvas) {
+          window.removeEventListener("click", handleClickOnCanvas);
+          handleClickOnCanvas = null;
+        }
+        if (handleMouseMoveOnCanvas) {
+          window.removeEventListener("mousemove", handleMouseMoveOnCanvas);
+          handleMouseMoveOnCanvas = null;
+        }
+        document.body.style.cursor = "default";
         return;
       }
 
+      // Клик
       handleClickOnCanvas = (event: MouseEvent) => {
         if (!camera.value || !renderer.value) return;
 
-        // Throw a ray from cursor through book
         setRayFromMouse(
           event,
           camera.value,
@@ -50,8 +61,6 @@ export function handleLinksOnMeshes(gltf: GLTFResult) {
           mouse
         );
 
-        // Check whether ray pierced certain page.
-        // Pierced page === clicked page.
         const emailPageIntersection = getPageIntersection(
           raycaster,
           meshesOfPages.emailPageMesh
@@ -61,13 +70,12 @@ export function handleLinksOnMeshes(gltf: GLTFResult) {
             emailPageIntersection.point
           );
 
-          // email
-          const isEmailButtonClicked = rectangleContainsVector3(
-            emailPagePoint,
-            appConfig.$config.public.linksLocalCoordinates.email
-          );
-
-          if (isEmailButtonClicked) {
+          if (
+            rectangleContainsVector3(
+              emailPagePoint,
+              appConfig.$config.public.linksLocalCoordinates.email
+            )
+          ) {
             copyEmail();
           }
           return;
@@ -83,31 +91,91 @@ export function handleLinksOnMeshes(gltf: GLTFResult) {
             linksPageIntersection.point
           );
 
-          // linked in
-          const isLinkedInClicked = rectangleContainsVector3(
-            linksPagePoint,
-            appConfig.$config.public.linksLocalCoordinates.linkedIn
-          );
-
-          if (isLinkedInClicked) {
+          if (
+            rectangleContainsVector3(
+              linksPagePoint,
+              appConfig.$config.public.linksLocalCoordinates.linkedIn
+            )
+          ) {
             openLinkedIn();
             return;
           }
 
-          // gh
-          const isGithubClicked = rectangleContainsVector3(
-            linksPagePoint,
-            appConfig.$config.public.linksLocalCoordinates.github
-          );
-
-          if (isGithubClicked) {
+          if (
+            rectangleContainsVector3(
+              linksPagePoint,
+              appConfig.$config.public.linksLocalCoordinates.github
+            )
+          ) {
             openGithub();
             return;
           }
         }
       };
 
+      // Move (для курсора)
+      handleMouseMoveOnCanvas = (event: MouseEvent) => {
+        if (!camera.value || !renderer.value) return;
+
+        setRayFromMouse(
+          event,
+          camera.value,
+          renderer.value.domElement,
+          raycaster,
+          mouse
+        );
+
+        let pointerNeeded = false;
+
+        const emailPageIntersection = getPageIntersection(
+          raycaster,
+          meshesOfPages.emailPageMesh
+        );
+        if (emailPageIntersection) {
+          const point = meshesOfPages.emailPageMesh.worldToLocal(
+            emailPageIntersection.point
+          );
+
+          if (
+            rectangleContainsVector3(
+              point,
+              appConfig.$config.public.linksLocalCoordinates.email
+            )
+          ) {
+            pointerNeeded = true;
+          }
+        }
+
+        const linksPageIntersection = getPageIntersection(
+          raycaster,
+          meshesOfPages.linksPageMesh
+        );
+        if (linksPageIntersection) {
+          const point = meshesOfPages.linksPageMesh.worldToLocal(
+            linksPageIntersection.point
+          );
+
+          if (
+            rectangleContainsVector3(
+              point,
+              appConfig.$config.public.linksLocalCoordinates.linkedIn
+            ) ||
+            rectangleContainsVector3(
+              point,
+              appConfig.$config.public.linksLocalCoordinates.github
+            )
+          ) {
+            pointerNeeded = true;
+          }
+        }
+
+        renderer.value.domElement.style.cursor = pointerNeeded
+          ? "pointer"
+          : "default";
+      };
+
       window.addEventListener("click", handleClickOnCanvas);
+      window.addEventListener("mousemove", handleMouseMoveOnCanvas);
     }
   );
 
@@ -115,5 +183,9 @@ export function handleLinksOnMeshes(gltf: GLTFResult) {
     if (handleClickOnCanvas) {
       window.removeEventListener("click", handleClickOnCanvas);
     }
+    if (handleMouseMoveOnCanvas) {
+      window.removeEventListener("mousemove", handleMouseMoveOnCanvas);
+    }
+    document.body.style.cursor = "default";
   });
 }
