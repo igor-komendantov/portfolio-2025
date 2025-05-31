@@ -26,17 +26,17 @@ export function usePrepareTurnAnimations(
       );
     }
 
-    scene.value.pageStep++;
-
     const onAnimationFinished = (event: any) => {
       if (event.action === animation) {
         mixer.removeEventListener("finished", onAnimationFinished);
         scene.value.turning = false;
+        scene.value.pageStep++;
       }
     };
 
     mixer.addEventListener("finished", onAnimationFinished);
     animation.play();
+
     scene.value.isPrevAvailable = true;
 
     const isLastActionInArray = turnActions.length - 1 === indexOfAnimation;
@@ -63,8 +63,6 @@ export function usePrepareTurnAnimations(
       );
     }
 
-    scene.value.pageStep--;
-
     animation.stop();
     animation.setLoop(LoopOnce, 1);
     animation.clampWhenFinished = true;
@@ -78,6 +76,7 @@ export function usePrepareTurnAnimations(
         animation.timeScale = 1;
         animation.reset();
         scene.value.turning = false;
+        scene.value.pageStep--;
         mixer.removeEventListener("finished", onAnimationFinished);
       }
     };

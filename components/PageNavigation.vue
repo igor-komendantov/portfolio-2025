@@ -26,6 +26,7 @@ const scene = useScene();
           :disabled="!scene.isNextAvailable || scene.turning"
         >
           <img src="/images/button-next.svg" width="170" />
+          <h1>{{ scene.pageStep }}</h1>
         </button>
       </transition>
     </div>
