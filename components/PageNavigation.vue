@@ -106,7 +106,7 @@ const scene = useScene();
 }
 
 .nav-label {
-  font-size: 2.6rem;
+  font-size: 2.3rem;
   border-radius: 4px;
   text-align: left;
   width: 100%;
