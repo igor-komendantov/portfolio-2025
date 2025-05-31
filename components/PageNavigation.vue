@@ -12,7 +12,7 @@ const scene = useScene();
           :disabled="!scene.isPrevAvailable || scene.turning"
           @click="scene.turnPrevPage"
         >
-          <img src="/images/button-prev.svg" width="170" />
+          <img src="/images/button-prev.svg" width="100" />
         </button>
       </transition>
     </div>
@@ -38,7 +38,7 @@ const scene = useScene();
           @click="scene.turnNextPage"
           :disabled="!scene.isNextAvailable || scene.turning"
         >
-          <img src="/images/button-next.svg" width="170" />
+          <img src="/images/button-next.svg" width="100" />
         </button>
       </div>
     </transition>
@@ -113,6 +113,7 @@ const scene = useScene();
   padding-left: 1rem;
   font-family: Arial;
   font-weight: 500;
+  color: #460808;
 }
 
 .nav-button {
