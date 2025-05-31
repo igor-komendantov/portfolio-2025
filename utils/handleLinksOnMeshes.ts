@@ -36,7 +36,6 @@ export function handleLinksOnMeshes(gltf: GLTFResult) {
       const isContactPageOpened = pageStep === 8;
 
       if (!isContactPageOpened) {
-        // Удаляем обработчики, если ушли со страницы
         if (handleClickOnCanvas) {
           window.removeEventListener("click", handleClickOnCanvas);
           handleClickOnCanvas = null;
@@ -49,7 +48,6 @@ export function handleLinksOnMeshes(gltf: GLTFResult) {
         return;
       }
 
-      // Клик
       handleClickOnCanvas = (event: MouseEvent) => {
         if (!camera.value || !renderer.value) return;
 
@@ -113,7 +111,6 @@ export function handleLinksOnMeshes(gltf: GLTFResult) {
         }
       };
 
-      // Move (для курсора)
       handleMouseMoveOnCanvas = (event: MouseEvent) => {
         if (!camera.value || !renderer.value) return;
 
