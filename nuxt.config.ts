@@ -42,6 +42,16 @@ export default defineNuxtConfig({
             z: 0.23959869589342925,
           },
         },
+        wwt: {
+          topLeft: {
+            x: -0.3492526287742414,
+            z: -0.033585567882319756,
+          },
+          bottomRight: {
+            x: 0.38567158697086207,
+            z: 0.4394350313302374,
+          },
+        },
       },
 
       meshWithWWT: "list_4_mesh",

@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import type { Group, PerspectiveCamera } from "three";
+import type { Group } from "three";
 import { useGLTF } from "@tresjs/cientos";
-import { useTres } from "@tresjs/core";
 import { useWindowSize } from "@vueuse/core";
 
 const scene = useScene();
@@ -17,7 +16,6 @@ const meshesOfPages = getMeshesOfClickablePages(gltf);
 
 function copyEmail() {
   navigator.clipboard.writeText(appConfig.$config.public.email);
-  console.log("copied");
 }
 
 function openLinkedIn() {
@@ -31,15 +29,11 @@ function openGithub() {
 function openWWT() {
   window.open(appConfig.$config.public.wwt, "_blank");
 }
-
 useInteractiveZones([
   {
     step: 3,
     mesh: meshesOfPages.wwtPageMesh!,
-    rect: {
-      topLeft: { x: -0.5, z: 0.1 },
-      bottomRight: { x: 0.5, z: 1 },
-    },
+    rect: appConfig.$config.public.linksLocalCoordinates.wwt,
     onClick: openWWT,
   },
   {
