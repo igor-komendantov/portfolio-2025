@@ -54,6 +54,8 @@ useInteractiveZones([
     onClick: openLinkedIn,
   },
 ]);
+
+
 </script>
 
 <template>

@@ -4,7 +4,7 @@ const scene = useScene();
 
 <template>
   <div class="nav">
-    <div>
+    <div class="nav-prev">
       <transition name="fade">
         <button
           v-show="scene.showNavigation && scene.isPrevAvailable"
@@ -17,23 +17,45 @@ const scene = useScene();
       </transition>
     </div>
 
-    <div>
-      <transition name="fade">
+    <transition name="fade">
+      <div
+        class="nav-next-wrapper"
+        v-show="scene.showNavigation && scene.isNextAvailable"
+      >
+        <div class="nav-label">
+          <transition name="fade">
+            <span
+              :class="{ 'page-step-hidden': scene.turning }"
+              class="page-step"
+              >{{ scene.pageStep }}</span
+            >
+          </transition>
+          / 8
+        </div>
+
         <button
-          v-show="scene.showNavigation && scene.isNextAvailable"
           class="nav-button"
           @click="scene.turnNextPage"
           :disabled="!scene.isNextAvailable || scene.turning"
         >
           <img src="/images/button-next.svg" width="170" />
-          <h1>{{ scene.pageStep }}</h1>
         </button>
-      </transition>
-    </div>
+      </div>
+    </transition>
   </div>
 </template>
 
 <style scoped>
+.page-step {
+  transition: opacity 0.5s ease;
+  opacity: 1;
+}
+.page-step.page-step-hidden {
+  opacity: 0;
+}
+
+/* ------------------ */
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s ease;
@@ -58,7 +80,6 @@ const scene = useScene();
   cursor: not-allowed;
   opacity: 0.3;
 }
-
 .nav {
   position: absolute;
   z-index: 9999;
@@ -70,11 +91,39 @@ const scene = useScene();
   grid-template-columns: 1fr 1fr;
   grid-template-rows: auto;
 }
-.nav > *:first-child {
-  justify-self: start; /* Прижать к левому краю своей колонки */
+
+.nav-prev {
+  justify-self: start;
+  align-self: end;
 }
 
-.nav > *:last-child {
-  justify-self: end; /* Прижать к правому краю своей колонки */
+.nav-next-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-self: end;
+  gap: 1rem;
+}
+
+.nav-label {
+  font-size: 2.6rem;
+  border-radius: 4px;
+  text-align: left;
+  width: 100%;
+  padding-left: 1rem;
+  font-family: Arial;
+  font-weight: 500;
+}
+
+.nav-button {
+  background: none;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  transition: all ease-in 0.5s;
+}
+.nav-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.3;
 }
 </style>
