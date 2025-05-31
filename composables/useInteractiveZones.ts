@@ -83,7 +83,9 @@ export function useInteractiveZones(zones: InteractiveZone[]) {
           if (!hit) continue;
           const local = z.mesh.worldToLocal(hit.point.clone());
 
-          if (isInRect(local, z.rect)) {
+          const isPointInRect = isInRect(local, z.rect);
+
+          if (isPointInRect) {
             z.onClick();
             break;
           }
