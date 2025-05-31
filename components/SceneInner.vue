@@ -63,13 +63,12 @@ useInteractiveZones([
 ]);
 
 const groupRef = ref<Group | null>(null);
-const { width, height } = useWindowSize();
+const { width } = useWindowSize();
 watch(
-  [width, height],
-  ([w, h]) => {
-    const maxSide = Math.max(w, h);
+  () => width.value,
+  (width) => {
     const baseSize = 1920;
-    const scale = Math.min(1, maxSide / baseSize);
+    const scale = Math.min(1, width / baseSize);
     groupRef.value?.scale.setScalar(scale);
   },
   { immediate: true }
