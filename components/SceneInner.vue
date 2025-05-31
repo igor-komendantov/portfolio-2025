@@ -1,7 +1,11 @@
 <script setup lang="ts">
+import type { PerspectiveCamera } from 'three';
+
 const scene = useScene();
 const gltf = await useGLTF("/models/book.glb");
 scene.value.gltfStatus = "ready";
+const camera = useTres().camera.value as PerspectiveCamera;
+useFitBookCamera(gltf.scene, camera);
 
 const { mixer } = useAnimations(gltf.animations, gltf.scene);
 
@@ -54,8 +58,6 @@ useInteractiveZones([
     onClick: openLinkedIn,
   },
 ]);
-
-
 </script>
 
 <template>
