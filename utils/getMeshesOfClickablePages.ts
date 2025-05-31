@@ -1,6 +1,6 @@
 import type { GLTFResult } from "@tresjs/cientos";
 
-export function getMeshesOfContactPages(gltf: GLTFResult) {
+export function getMeshesOfClickablePages(gltf: GLTFResult) {
   const appConfig = useNuxtApp();
 
   const emailPageMesh = gltf.scene.getObjectByName(
@@ -8,6 +8,9 @@ export function getMeshesOfContactPages(gltf: GLTFResult) {
   );
   const linksPageMesh = gltf.scene.getObjectByName(
     appConfig.$config.public.meshWithLinks
+  );
+  const wwtPageMesh = gltf.scene.getObjectByName(
+    appConfig.$config.public.meshWithWWT
   );
 
   if (!emailPageMesh) {
@@ -20,5 +23,6 @@ export function getMeshesOfContactPages(gltf: GLTFResult) {
   return {
     emailPageMesh,
     linksPageMesh,
+    wwtPageMesh,
   };
 }

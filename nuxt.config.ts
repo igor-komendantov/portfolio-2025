@@ -8,6 +8,7 @@ export default defineNuxtConfig({
       email: "placeholder",
       linkedIn: "placeholder",
       github: "placeholder",
+      wwt: "placeholder",
 
       // These coordinates are separated from urls, because urls should be overrided by ENV file.
       linksLocalCoordinates: {
@@ -43,6 +44,7 @@ export default defineNuxtConfig({
         },
       },
 
+      meshWithWWT: "list_4_mesh",
       meshWithEmail: "list_8_mesh",
       meshWithLinks: "list_9_mesh",
     },
