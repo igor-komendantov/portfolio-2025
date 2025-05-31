@@ -9,12 +9,20 @@ const { gltf, mixer } = defineProps<{
 
 const scene = useScene();
 
-const turnFirstPage = prepareActionOfOpening(gltf.animations, mixer);
+const actionsOfOpening = prepareActionOfOpening(gltf.animations, mixer);
 
 const openBook = async () => {
-  await turnFirstPage();
-  scene.value.showNavigation = true;
-  scene.value.pageStep = 1
+  const onAnimationFinished = (event: any) => {
+    if (event.action === actionsOfOpening.turnFirstPage) {
+      mixer.removeEventListener("finished", onAnimationFinished);
+      scene.value.pageStep = 1;
+      scene.value.showNavigation = true;
+    }
+  };
+
+  mixer.addEventListener("finished", onAnimationFinished);
+  actionsOfOpening.unlockButton.play();
+  actionsOfOpening.turnFirstPage.play();
 };
 </script>
 
