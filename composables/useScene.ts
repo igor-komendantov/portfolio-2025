@@ -9,6 +9,11 @@ export const useScene = () => {
     isPrevAvailable: false,
     isNextAvailable: true,
     turning: false,
-    gltfStatus: 'idle' as 'idle' | 'loading' | 'ready',
+    gltfStatus: "idle" as "idle" | "loading" | "ready",
+
+    alert: {
+      content: null as null | string,
+      visible: false
+    },
   }));
 };

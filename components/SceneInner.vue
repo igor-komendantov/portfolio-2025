@@ -16,6 +16,8 @@ const meshesOfPages = getMeshesOfClickablePages(gltf);
 
 function copyEmail() {
   navigator.clipboard.writeText(appConfig.$config.public.email);
+  scene.value.alert.content = "Copied";
+  scene.value.alert.visible = true
 }
 
 function openLinkedIn() {

@@ -11,6 +11,8 @@ const scene = useScene();
         </Suspense>
       </TresCanvas>
       <PageNavigation />
+
+      <SceneAlert/>
     </div>
   </transition>
 </template>
